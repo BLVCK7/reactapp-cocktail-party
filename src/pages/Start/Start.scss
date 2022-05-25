@@ -4,4 +4,18 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 50vw bottom;
+
+    @media only screen and (max-width: 600px), (max-width: 1170px) {
+        background: none;
+      }
+}
+
+.content {
+    @media only screen and (max-width: 600px), (max-width: 1170px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+      }
 }

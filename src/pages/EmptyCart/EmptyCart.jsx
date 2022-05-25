@@ -1,13 +1,11 @@
 import React from 'react';
 
-import './Catalog.scss';
+import './EmptyCart.scss';
 
-import strawberry from '../../assets/img/item-strawberry.png';
-import banana from '../../assets/img/item_banana.png';
-import vanilla from '../../assets/img/item-vanilla.png';
+import emptyCartMilkshake from '../../assets/img/empty_cart.png';
 import { Link } from 'react-router-dom';
 
-const Catalog = () => {
+const EmptyCart = () => {
   return (
     <>
       <header>
@@ -57,127 +55,19 @@ const Catalog = () => {
             </div>
           </div>
         </Link>
-        <div className="search">
-          <input type="search" placeholder="Название милкшейка..." autocomplete="off" />
-        </div>
-        <Link to="/cart">
-          <div className="cart">
-            <svg
-              width="42"
-              height="42"
-              viewBox="0 0 42 42"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M8.176 9.1L7.5929 5.6H5.4999C5.1877 4.396 4.1013 3.5 2.8 3.5C1.2558 3.5 0 4.7558 0 6.3C0 7.8442 1.2558 9.1 2.8 9.1C4.1013 9.1 5.1877 8.204 5.5006 7H6.4064L6.7564 9.1H6.7298L10.3495 27.3112C8.624 27.4428 7.1869 28.7714 7.0175 30.443C6.9181 31.4265 7.2415 32.4114 7.9051 33.1436C8.5694 33.8779 9.5158 34.3 10.5 34.3H11.9C11.9 36.6163 13.7837 38.5 16.1 38.5C18.4163 38.5 20.3 36.6163 20.3 34.3H28C28 36.6163 29.8837 38.5 32.2 38.5C34.5163 38.5 36.4 36.6163 36.4 34.3H39.2C39.5871 34.3 39.9 33.9871 39.9 33.6C39.9 33.2129 39.5871 32.9 39.2 32.9H36.155C35.5768 31.2711 34.0249 30.1 32.2 30.1C30.3751 30.1 28.8232 31.2711 28.245 32.9H20.055C19.4768 31.2711 17.9249 30.1 16.1 30.1C14.2751 30.1 12.7232 31.2711 12.145 32.9H10.5C9.9106 32.9 9.3436 32.6466 8.9432 32.2049C8.5393 31.7576 8.3496 31.1822 8.4105 30.5837C8.5169 29.5274 9.4927 28.7007 10.6316 28.7007H11.1853C11.1951 28.7007 11.2028 28.7007 11.2126 28.7007H38.5084C40.4341 28.7 42 27.1341 42 25.2091V9.1H8.176ZM2.8 7.7C2.0279 7.7 1.4 7.0721 1.4 6.3C1.4 5.5279 2.0279 4.9 2.8 4.9C3.5721 4.9 4.2 5.5279 4.2 6.3C4.2 7.0721 3.5721 7.7 2.8 7.7ZM32.2 31.5C33.7442 31.5 35 32.7558 35 34.3C35 35.8442 33.7442 37.1 32.2 37.1C30.6558 37.1 29.4 35.8442 29.4 34.3C29.4 32.7558 30.6558 31.5 32.2 31.5ZM16.1 31.5C17.6442 31.5 18.9 32.7558 18.9 34.3C18.9 35.8442 17.6442 37.1 16.1 37.1C14.5558 37.1 13.3 35.8442 13.3 34.3C13.3 32.7558 14.5558 31.5 16.1 31.5ZM40.6 25.2091C40.6 26.362 39.662 27.3 38.5091 27.3H11.7747L8.4357 10.5H40.6V25.2091Z"
-                fill="white"
-              />
-            </svg>
-            <p>3 500 ₽</p>
-          </div>
-        </Link>
       </header>
-      <div className="sort">
-        <h1>Фильтр</h1>
-        <button className="active">Все</button>
-        <button>Хит</button>
-        <button>Десертные</button>
-        <button>Фруктовые</button>
-        <button>Без сахара</button>
-        <svg
-          width="34"
-          height="34"
-          viewBox="0 0 34 34"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <g clip-path="url(#clip0_5_302)">
-            <path
-              d="M18.1532 22.6557C17.5766 22.1486 16.6387 22.225 16.1315 22.8016L10.782 28.832V4.73132C10.782 3.93931 10.1289 3.28625 9.33692 3.28625C8.54492 3.28625 7.89186 3.93931 7.89186 4.73132V28.832L2.54233 22.8016C1.96569 22.225 1.09726 22.1486 0.520625 22.6557C-0.0560127 23.2323 -0.132434 24.1008 0.374729 24.6774L8.25312 33.4937C8.84366 34.2232 9.88577 34.112 10.3513 33.4937L18.2991 24.6774C18.8063 24.1077 18.7368 23.1629 18.1532 22.6557Z"
-              fill="white"
-            />
-            <path
-              d="M33.6252 9.35831L25.8162 0.542013C25.1215 -0.159678 24.2531 -0.201363 23.6486 0.542013L15.7008 9.35831C15.1936 9.93495 15.27 10.8729 15.8467 11.38C16.7359 12.0887 17.6322 11.6023 17.8684 11.2341L23.2179 5.20374V29.2349C23.2179 30.0269 23.871 30.68 24.663 30.68C25.455 30.68 26.108 30.1034 26.108 29.3044V5.21069L31.4576 11.2411C32.0342 11.8177 32.9026 11.8941 33.4793 11.387C34.0559 10.8034 34.1323 9.93495 33.6252 9.35831Z"
-              fill="white"
-            />
-          </g>
-          <defs>
-            <clipPath id="clip0_5_302">
-              <rect width="34" height="34" fill="white" />
-            </clipPath>
-          </defs>
-        </svg>
-        <div className="sort-popup">
-          <ul>
-            <li>популярности (DESC)</li>
-            <li>популярности (ASC)</li>
-            <li>цене (DESC)</li>
-            <li>цене (ASC)</li>
-            <li>алфавиту (А - Я)</li>
-            <li>алфавиту (Я - А)</li>
-          </ul>
+      <section>
+        <div className="card">
+          <h1>Корзина пустая</h1>
+          <p>Быстрее переходи и заказывай самые вкусные милкшейки на планете!</p>
+          <img src={emptyCartMilkshake} alt="Empty cart" />
+          <Link to="/catalog">
+            <button>Выбрать милкшейк</button>
+          </Link>
         </div>
-      </div>
-      <div className="cards">
-        <div className="cards--item">
-          <div className="cards--item-header-red">
-            <h1>Безумная клубничка</h1>
-          </div>
-          <img src={strawberry} alt="Безумная клубничка" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
-        <div className="cards--item">
-          <div className="cards--item-header-yellow">
-            <h1>Неуловимый банан</h1>
-          </div>
-          <img src={banana} alt="Неуловимый банан" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
-        <div className="cards--item">
-          <div className="cards--item-header-blue">
-            <h1>Охлаждающая ванилька</h1>
-          </div>
-          <img src={vanilla} alt="Охлаждающая ванилька" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
-      </div>
-      <div className="paginations">
-        <svg
-          width="14"
-          height="24"
-          viewBox="0 0 14 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 1L2 12L13 23" stroke="white" stroke-width="2" />
-        </svg>
-        <i>
-          <span>1</span>
-        </i>
-        <i className="active">
-          <span className="active">2</span>
-        </i>
-        <i>
-          <span>3</span>
-        </i>
-        <svg
-          width="14"
-          height="24"
-          viewBox="0 0 14 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L12 12L1 23" stroke="white" stroke-width="2" />
-        </svg>
-      </div>
+      </section>
     </>
   );
 };
 
-export default Catalog;
+export default EmptyCart;
