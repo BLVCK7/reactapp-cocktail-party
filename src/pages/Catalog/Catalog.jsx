@@ -2,12 +2,15 @@ import React from 'react';
 
 import './Catalog.scss';
 
-import strawberry from '../../assets/img/item-strawberry.png';
-import banana from '../../assets/img/item_banana.png';
-import vanilla from '../../assets/img/item-vanilla.png';
 import { Link } from 'react-router-dom';
+import Cards from '../../components/Cards';
+
+import milkshake from '../../assets/milkshake.json';
 
 const Catalog = () => {
+  const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
+
+  const [activeFilter, setActiveFilter] = React.useState(0);
   return (
     <>
       <header>
@@ -19,7 +22,7 @@ const Catalog = () => {
               viewBox="0 0 80 80"
               fill="none"
               xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_2_143)">
+              <g clipPath="url(#clip0_2_143)">
                 <path
                   d="M44.1361 62.7456C43.4907 62.6248 42.869 63.0513 42.7484 63.6973L41.9806 67.8168C41.8601 68.4628 42.2862 69.084 42.9323 69.2045C43.0059 69.2182 44.085 69.3842 44.32 68.2528L45.0878 64.1332C45.2079 63.4871 44.782 62.8659 44.1361 62.7456Z"
                   fill="white"
@@ -58,7 +61,7 @@ const Catalog = () => {
           </div>
         </Link>
         <div className="search">
-          <input type="search" placeholder="Название милкшейка..." autocomplete="off" />
+          <input type="search" placeholder="Название милкшейка..." autoComplete="off" />
         </div>
         <Link to="/cart">
           <div className="cart">
@@ -79,18 +82,21 @@ const Catalog = () => {
       </header>
       <div className="sort">
         <h1>Фильтр</h1>
-        <button className="active">Все</button>
-        <button>Хит</button>
-        <button>Десертные</button>
-        <button>Фруктовые</button>
-        <button>Без сахара</button>
+        {filterArr.map((obj, i) => (
+          <button
+            key={i}
+            className={i === activeFilter ? 'active' : ''}
+            onClick={() => setActiveFilter(i)}>
+            {obj}
+          </button>
+        ))}
         <svg
           width="34"
           height="34"
           viewBox="0 0 34 34"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
-          <g clip-path="url(#clip0_5_302)">
+          <g clipPath="url(#clip0_5_302)">
             <path
               d="M18.1532 22.6557C17.5766 22.1486 16.6387 22.225 16.1315 22.8016L10.782 28.832V4.73132C10.782 3.93931 10.1289 3.28625 9.33692 3.28625C8.54492 3.28625 7.89186 3.93931 7.89186 4.73132V28.832L2.54233 22.8016C1.96569 22.225 1.09726 22.1486 0.520625 22.6557C-0.0560127 23.2323 -0.132434 24.1008 0.374729 24.6774L8.25312 33.4937C8.84366 34.2232 9.88577 34.112 10.3513 33.4937L18.2991 24.6774C18.8063 24.1077 18.7368 23.1629 18.1532 22.6557Z"
               fill="white"
@@ -118,36 +124,16 @@ const Catalog = () => {
         </div>
       </div>
       <div className="cards">
-        <div className="cards--item">
-          <div className="cards--item-header-red">
-            <h1>Безумная клубничка</h1>
-          </div>
-          <img src={strawberry} alt="Безумная клубничка" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
-        <div className="cards--item">
-          <div className="cards--item-header-yellow">
-            <h1>Неуловимый банан</h1>
-          </div>
-          <img src={banana} alt="Неуловимый банан" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
-        <div className="cards--item">
-          <div className="cards--item-header-blue">
-            <h1>Охлаждающая ванилька</h1>
-          </div>
-          <img src={vanilla} alt="Охлаждающая ванилька" />
-          <div className="cards--item-footer">
-            <button>В корзину</button>
-            <span>500 ₽</span>
-          </div>
-        </div>
+        {milkshake.map((obj) => (
+          <Cards
+            key={obj.id}
+            name={obj.name}
+            image={obj.imageUrl}
+            price={obj.price}
+            color={obj.color}
+            id={obj.id}
+          />
+        ))}
       </div>
       <div className="paginations">
         <svg
@@ -156,7 +142,7 @@ const Catalog = () => {
           viewBox="0 0 14 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 1L2 12L13 23" stroke="white" stroke-width="2" />
+          <path d="M13 1L2 12L13 23" stroke="white" strokeWidth="2" />
         </svg>
         <i>
           <span>1</span>
@@ -173,7 +159,7 @@ const Catalog = () => {
           viewBox="0 0 14 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L12 12L1 23" stroke="white" stroke-width="2" />
+          <path d="M1 1L12 12L1 23" stroke="white" strokeWidth="2" />
         </svg>
       </div>
     </>
