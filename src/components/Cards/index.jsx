@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Cards = ({ name, image, price, color, id }) => {
+const Cards = ({ name, imageUrl, price, color }) => {
   return (
     <div className="cards--item">
-      <div key={id} className="cards--item-header-red" style={{ background: { color } }}>
+      <div className="cards--item-header" style={{ background: color }}>
         <h1>{name}</h1>
       </div>
-      <img src={image} alt={name} />
+      <img src={imageUrl} alt={name} />
       <div className="cards--item-footer">
         <button>В корзину</button>
         <span>{price} ₽</span>

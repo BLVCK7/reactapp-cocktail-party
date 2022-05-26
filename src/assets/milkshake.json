@@ -4,7 +4,7 @@
         "name": "Неуловимый банан",
         "imageUrl": "img/item_banana.png",
         "price": 500,
-        "color": "red",
+        "color": "#FFF500",
         "category": 1
     },
     {
@@ -12,7 +12,7 @@
         "name": "Безумная клубничка",
         "imageUrl": "img/item-strawberry.png",
         "price": 521,
-        "color": "red",
+        "color": "#FF4E40",
         "category": 2
     },
     {
@@ -20,7 +20,7 @@
         "name": "Охлаждающая ванилька",
         "imageUrl": "img/item-vanilla.png",
         "price": 700,
-        "color": "red",
+        "color": "#00A1AB",
         "category": 3
     }
 ]

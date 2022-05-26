@@ -6,7 +6,7 @@ import './Cart.scss';
 import vanila from '../../assets/img/item-vanilla.png';
 import strawberry from '../../assets/img/item-strawberry.png';
 import banana from '../../assets/img/item_banana.png';
-import Item from './Item/Item';
+import Item from '../../components/Item';
 
 const Cart = () => {
   return (

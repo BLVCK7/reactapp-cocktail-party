@@ -16,13 +16,9 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   overflow: hidden;
-
-  @media only screen and (max-width: 600px), (max-width: 1170px) {
-    height: 100%;
-    min-height: 100vh;
-  }
 
   .container {
     width: 1170px;
@@ -37,26 +33,34 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
       height: 105px;
       width: 1168px;
 
-      @media only screen and (max-width: 600px), (max-width: 1170px) {
+      @media (max-width: 1200px) {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        padding-right: 780px;
+      }
+
+      @media (max-width: 800px) {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
       }
 
       a {
         text-decoration: none;
+
+        @media (max-width: 1200px) {
+          margin-bottom: 20px;
+          margin-top: 20px;
+          padding-right: 15px;
+        }
+
+        @media (max-width: 800px) {
+         margin-top: 0;
+        }
       }
 
       .logo {
         width: 210px;
         display: flex;
-
-        @media only screen and (max-width: 600px), (max-width: 1170px) {
-          margin-left: 20px;
-          margin-right: 180px;
-          margin-bottom: 40px;
-        }
 
         cursor: pointer;
 
@@ -86,10 +90,6 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
           &:hover {
             opacity: 1;
           }
-
-          @media only screen and (max-width: 600px), (max-width: 1170px) {
-            left: 335px;
-          }
         }
 
         input {
@@ -105,55 +105,66 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
 
           padding: 20px;
 
-          @media only screen and (max-width: 600px), (max-width: 1170px) {
-            margin-bottom: 30px;
+          @media (max-width: 800px) {
+            margin-left: 10px;
           }
         }
       }
 
       .cart {
         cursor: pointer;
+
+        @media (max-width: 800px) {
+          margin-left: 160px;
+          margin-top: 35px;
+        }
       }
     }
 
     .main {
       display: flex;
+      height: 100%;
+      min-height: 100vh;
 
       .content {
         margin-top: 150px;
         color: #fff;
 
-        @media only screen and (max-width: 600px), (max-width: 1170px) {
-          margin-top: 50px;
+        @media (max-width: 800px) {
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-start;
+          text-align: start;
+          margin-left: 10px;
         }
 
         h1 {
           width: 560px;
           margin-bottom: 35px;
 
-          @media only screen and (max-width: 600px) {
-            width: 400px;
-          }
-
           font-family: 'Montserrat';
           font-style: normal;
           font-weight: 700;
           font-size: 40px;
           line-height: 49px;
+          
+          @media (max-width: 800px) {
+            width: 350px;
+          }
         }
 
         p {
           width: 500px;
-
-          @media only screen and (max-width: 600px) {
-            width: 400px;
-          }
 
           font-family: 'Montserrat';
           font-style: normal;
           font-weight: 400;
           font-size: 20px;
           line-height: 145%;
+
+          @media (max-width: 800px) {
+            width: 350px;
+          }
         }
 
         button {
