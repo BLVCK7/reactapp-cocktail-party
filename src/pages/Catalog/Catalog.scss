@@ -107,6 +107,7 @@
 
         p {
             cursor: pointer;
+            width: 215px;
         }
 
         &-list {
@@ -118,7 +119,7 @@
             position: absolute;
             top: 50px;
             li {
-                width: 210px;
+                width: 240px;
                 height: 30px;
                 padding-left: 15px;
                 padding-top: 6px;

@@ -12,16 +12,19 @@ import Skeleton from '../../components/Cards/Skeleton';
 const Catalog = () => {
   const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
   const sortArr = [
-    'популярности (DESC)',
-    'популярности (ASC)',
-    'цене (DESC)',
-    'цене (ASC)',
-    'алфавиту (А - Я)',
-    'алфавиту (Я - А)',
+    { name: 'популярности (по возр.)', type: 'rating', order: 'asc' },
+    { name: 'популярности (по убыв.)', type: 'rating', order: 'desc' },
+    { name: 'цене (по возр.)', type: 'price', order: 'asc' },
+    { name: 'цене (по убыв.)', type: 'price', order: 'desc' },
+    { name: 'алфавиту (А - Я)', type: 'name', order: 'asc' },
+    { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
   ];
 
   const [activeFilter, setActiveFilter] = React.useState(0);
-  const [activeSort, setActiveSort] = React.useState(0);
+  const [activeSort, setActiveSort] = React.useState({
+    name: 'популярности (ASC)',
+    type: 'rating',
+  });
   const [animateSortIcon, setAnimateSortIcon] = React.useState(false);
   const [visiblePopUp, setVisiblePopUp] = React.useState(false);
   const [item, setItem] = React.useState([]);
@@ -33,13 +36,19 @@ const Catalog = () => {
   };
 
   React.useEffect(() => {
-    fetch('https://628f8bb5dc47852365428e7e.mockapi.io/items')
+    setIsLoading(true);
+    fetch(
+      `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
+        activeFilter > 0 ? `category=${activeFilter}` : ''
+      }&sortBy=${activeSort.type}&order=${activeSort.order}`,
+    )
       .then((response) => response.json())
       .then((arr) => {
         setItem(arr);
         setIsLoading(false);
       });
-  }, []);
+    window.scrollTo(0, 0);
+  }, [activeSort, activeFilter]);
 
   return (
     <>
@@ -103,16 +112,16 @@ const Catalog = () => {
               <ul>
                 {sortArr.map((obj, i) => (
                   <li
-                    onClick={() => setActiveSort(i)}
+                    onClick={() => setActiveSort(obj)}
                     key={i}
-                    className={activeSort === i ? 'active' : ''}>
-                    {obj}
+                    className={activeSort.name === i ? 'active' : ''}>
+                    {obj.name}
                   </li>
                 ))}
               </ul>
             </div>
           )}
-          <p>{sortArr[activeSort]}</p>
+          <p>{activeSort.name}</p>
         </div>
       </div>
       <div className="cards">
