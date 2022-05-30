@@ -1,8 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import Cart from './pages/Cart/Cart';
-import Catalog from './pages/Catalog/Catalog';
-import EmptyCart from './pages/EmptyCart/EmptyCart';
-import Start from './pages/Start/Start';
+import { Cart, Catalog, EmptyCart, Start } from './pages';
 
 function App() {
   return (

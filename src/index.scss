@@ -70,6 +70,32 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
       }
 
       .search {
+        position: relative;
+
+        .cancel-icon {
+          position: absolute;
+          left: 335px;
+          top: 12px;
+
+          cursor: pointer;
+
+          @media (max-width: 800px) {
+            left: 345px;
+          }
+        }
+
+        img {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 12px;
+            left: 10px;
+            opacity: 0.3;
+
+            @media (max-width: 800px) {
+              left: 20px;
+            }
+        }
 
         button {
           position: absolute;
@@ -101,9 +127,9 @@ body, p, span, h1, h2, h3, h4, h5, h6 {
           box-sizing: border-box;
 
           border: 2px solid #FFFFFF;
-          border-radius: 30px;
+          border-radius: 15px;
 
-          padding: 20px;
+          padding: 20px 0 20px 35px;
 
           @media (max-width: 800px) {
             margin-left: 10px;
