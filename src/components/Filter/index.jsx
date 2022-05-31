@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveFilter, setActiveSort } from '../../redux/slices/filterSlice';
 
 const Filter = () => {
+  const dispatch = useDispatch();
+  const { activeFilter, activeSort } = useSelector((state) => state.filter);
+
   const [animateSortIcon, setAnimateSortIcon] = React.useState(false);
   const [visiblePopUp, setVisiblePopUp] = React.useState(false);
 
@@ -20,10 +23,6 @@ const Filter = () => {
     { name: 'алфавиту (А - Я)', type: 'name', order: 'asc' },
     { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
   ];
-
-  const dispatch = useDispatch();
-  const activeFilter = useSelector((state) => state.filter.activeFilter);
-  const activeSort = useSelector((state) => state.filter.activeSort);
 
   console.log(activeFilter, activeSort);
 

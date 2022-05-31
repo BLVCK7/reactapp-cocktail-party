@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 import './Catalog.scss';
 
@@ -10,25 +11,24 @@ import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
 
 const Catalog = () => {
+  const { activeFilter, activeSort } = useSelector((state) => state.filter);
+
   const [item, setItem] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [search, setSearch] = React.useState('');
 
-  const activeFilter = useSelector((state) => state.filter.activeFilter);
-  const activeSort = useSelector((state) => state.filter.activeSort);
-
   React.useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
-        search === '' ? '' : `search=${search}&`
-      }${activeFilter > 0 ? `category=${activeFilter}` : ''}&sortBy=${activeSort.type}&order=${
-        activeSort.order
-      }`,
-    )
-      .then((response) => response.json())
-      .then((arr) => {
-        setItem(arr);
+    axios
+      .get(
+        `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
+          search === '' ? '' : `search=${search}&`
+        }${activeFilter > 0 ? `category=${activeFilter}` : ''}&sortBy=${activeSort.type}&order=${
+          activeSort.order
+        }`,
+      )
+      .then((response) => {
+        setItem(response.data);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
