@@ -24,8 +24,6 @@ const Filter = () => {
     { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
   ];
 
-  console.log(activeFilter, activeSort);
-
   return (
     <div className="filter">
       <h1>Фильтр</h1>

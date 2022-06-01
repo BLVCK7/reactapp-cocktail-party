@@ -4,7 +4,11 @@ import debounce from 'lodash.debounce';
 import searchSVG from '../../assets/img/search.svg';
 import cancelSVG from '../../assets/img/cancel.svg';
 
-const Search = ({ setSearch }) => {
+import { setSearch } from '../../redux/slices/filterSlice';
+
+// Не передается запрос при поиске. Надо пофиксить
+
+const Search = () => {
   const [value, setValue] = React.useState('');
   const inputRef = React.useRef();
 

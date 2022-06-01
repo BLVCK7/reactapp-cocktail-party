@@ -1,7 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setLoading, setItems } from '../../redux/slices/itemsSlice';
+import { itemsApi } from '../../redux/services/itemsService';
 
 import './Catalog.scss';
 
@@ -11,14 +14,15 @@ import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
 
 const Catalog = () => {
-  const { activeFilter, activeSort } = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
-  const [item, setItem] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [search, setSearch] = React.useState('');
+  const { activeFilter, activeSort, search } = useSelector((state) => state.filter);
+  const { items, isLoading } = useSelector((state) => state.items);
+
+  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
 
   React.useEffect(() => {
-    setIsLoading(true);
+    dispatch(setLoading(true));
     axios
       .get(
         `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
@@ -28,8 +32,8 @@ const Catalog = () => {
         }`,
       )
       .then((response) => {
-        setItem(response.data);
-        setIsLoading(false);
+        dispatch(setItems(response.data));
+        dispatch(setLoading(false));
       });
     window.scrollTo(0, 0);
   }, [activeSort, activeFilter, search]);
@@ -46,7 +50,7 @@ const Catalog = () => {
             </div>
           </div>
         </Link>
-        <Search search={search} setSearch={setSearch} />
+        <Search />
         <Link to="/cart">
           <div className="cart">
             <img src={cartSVG} alt="Cart icon" />
@@ -58,7 +62,7 @@ const Catalog = () => {
       <div className="cards">
         {isLoading
           ? [...new Array(3)].map((_, i) => <Skeleton key={i} />)
-          : item.map((obj) => <Cards key={obj.id} {...obj} />)}
+          : items.map((obj) => <Cards key={obj.id} {...obj} />)}
       </div>
     </>
   );
