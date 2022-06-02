@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setLoading, setItems } from '../../redux/slices/itemsSlice';
-import { itemsApi } from '../../redux/services/itemsService';
+import { setLoading, setItems, addItemToCart } from '../../redux/slices/itemsSlice';
+// import { itemsApi } from '../../redux/services/itemsService';
 
 import './Catalog.scss';
 
@@ -17,7 +17,7 @@ const Catalog = () => {
   const dispatch = useDispatch();
 
   const { activeFilter, activeSort, search } = useSelector((state) => state.filter);
-  const { items, isLoading } = useSelector((state) => state.items);
+  const { items, isLoading, totalPrice } = useSelector((state) => state.items);
 
   // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
 
@@ -36,7 +36,12 @@ const Catalog = () => {
         dispatch(setLoading(false));
       });
     window.scrollTo(0, 0);
+    // eslint-disable-next-line
   }, [activeSort, activeFilter, search]);
+
+  const handlerOnAddItemToCart = (obj) => {
+    dispatch(addItemToCart(obj));
+  };
 
   return (
     <>
@@ -54,7 +59,7 @@ const Catalog = () => {
         <Link to="/cart">
           <div className="cart">
             <img src={cartSVG} alt="Cart icon" />
-            <p>3 500 ₽</p>
+            <p>{totalPrice} ₽</p>
           </div>
         </Link>
       </header>
@@ -62,7 +67,9 @@ const Catalog = () => {
       <div className="cards">
         {isLoading
           ? [...new Array(3)].map((_, i) => <Skeleton key={i} />)
-          : items.map((obj) => <Cards key={obj.id} {...obj} />)}
+          : items.map((obj) => (
+              <Cards key={obj.id} handlerOnAddItemToCart={handlerOnAddItemToCart} {...obj} />
+            ))}
       </div>
     </>
   );

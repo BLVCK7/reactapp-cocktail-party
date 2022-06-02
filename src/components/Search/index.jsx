@@ -1,26 +1,28 @@
 import React from 'react';
 import debounce from 'lodash.debounce';
+import { useDispatch } from 'react-redux';
 
 import searchSVG from '../../assets/img/search.svg';
 import cancelSVG from '../../assets/img/cancel.svg';
 
 import { setSearch } from '../../redux/slices/filterSlice';
 
-// Не передается запрос при поиске. Надо пофиксить
-
 const Search = () => {
+  const dispatch = useDispatch();
+
   const [value, setValue] = React.useState('');
   const inputRef = React.useRef();
 
   const onClickClear = () => {
-    setSearch('');
+    dispatch(setSearch(''));
     setValue('');
     inputRef.current.focus();
   };
 
+  // eslint-disable-next-line
   const testDebounce = React.useCallback(
     debounce((str) => {
-      setSearch(str);
+      dispatch(setSearch(str));
     }, 700),
     [],
   );

@@ -1,6 +1,21 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { setTotalPrice } from '../../redux/slices/itemsSlice';
 
-const Cards = ({ name, imageUrl, price, color }) => {
+const Cards = ({ id, name, imageUrl, price, color, handlerOnAddItemToCart }) => {
+  const dispatch = useDispatch();
+
+  const onCartAddItem = () => {
+    const obj = {
+      id,
+      name,
+      imageUrl,
+      price,
+    };
+    handlerOnAddItemToCart(obj);
+    dispatch(setTotalPrice(obj.price));
+  };
+
   return (
     <div className="cards--item">
       <div className="cards--item-header" style={{ background: color }}>
@@ -8,7 +23,7 @@ const Cards = ({ name, imageUrl, price, color }) => {
       </div>
       <img src={imageUrl} alt={name} />
       <div className="cards--item-footer">
-        <button>В корзину</button>
+        <button onClick={onCartAddItem}>В корзину</button>
         <span>{price} ₽</span>
       </div>
     </div>
@@ -16,3 +31,5 @@ const Cards = ({ name, imageUrl, price, color }) => {
 };
 
 export default Cards;
+
+// (obj.id === i ? setCartItems(obj) : '')

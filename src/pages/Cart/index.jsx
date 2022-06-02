@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 
 import './Cart.scss';
 
-import vanila from '../../assets/img/item-vanilla.png';
-import strawberry from '../../assets/img/item-strawberry.png';
-import banana from '../../assets/img/item_banana.png';
 import Item from '../../components/Item';
+import { useSelector } from 'react-redux';
 
 const Cart = () => {
+  const { cartItems, itemCount, totalCount, itemPrice, totalPrice, items } = useSelector(
+    (state) => state.items,
+  );
+
+  // const addedItems = Object.keys(cartItems).map((key) => {
+  //   return cartItems[key].items[0];
+  // });
+
+  console.log(cartItems);
   return (
     <>
       <header>
@@ -90,18 +97,18 @@ const Cart = () => {
           </div>
         </div>
         <div className="items">
-          <Item img={vanila} name="Охлаждающая ванилька" price="1000" count="2" />
-          <Item img={strawberry} name="Безумная клубничка" price="2000" count="4" />
-          <Item img={banana} name="Неуловимый банан" price="500" count="1" />
+          {cartItems.map((obj, i) => (
+            <Item key={i} img={obj.imageUrl} name={obj.name} price="1000" count="2" />
+          ))}
         </div>
         <div className="count-price">
           <div className="count">
             <h3>Всего: </h3>
-            <span>7 шт.</span>
+            <span>{totalCount} шт.</span>
           </div>
           <div className="price">
             <h3>Сумма заказа: </h3>
-            <span>3500 ₽</span>
+            <span>{totalPrice} ₽</span>
           </div>
         </div>
         <div className="buttons">
