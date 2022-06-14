@@ -1,20 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './Cart.scss';
 
 import Item from '../../components/Item';
-import { useSelector } from 'react-redux';
+
+import { setClearItem } from '../../redux/slices/cartSlice';
 
 const Cart = () => {
-  const { cartItems, itemCount, totalCount, itemPrice, totalPrice, items } = useSelector(
-    (state) => state.items,
-  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const addedItems = Object.keys(cartItems).map((key) => {
-  //   return cartItems[key].items[0];
-  // });
+  const { cartItems, totalPrice, totalCount } = useSelector((state) => state.cart);
 
+  const onClickClearCart = () => {
+    dispatch(setClearItem());
+    navigate('/empty_cart');
+  };
+
+  console.log(cartItems);
   return (
     <>
       <header>
@@ -68,7 +73,7 @@ const Cart = () => {
       <section className="main-section">
         <div className="main-section--header">
           <h1>Корзина</h1>
-          <div className="clear-cart">
+          <div onClick={() => onClickClearCart()} className="clear-cart">
             <svg
               width="32"
               height="32"
@@ -97,7 +102,13 @@ const Cart = () => {
         </div>
         <div className="items">
           {cartItems.map((obj, i) => (
-            <Item key={i} img={obj.imageUrl} name={obj.name} price="1000" count="2" />
+            <Item
+              key={i}
+              img={obj.imageUrl}
+              name={obj.name}
+              price={obj.price * obj.count}
+              count={obj.count}
+            />
           ))}
         </div>
         <div className="count-price">

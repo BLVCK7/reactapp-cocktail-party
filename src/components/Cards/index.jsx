@@ -1,19 +1,21 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { setTotalPrice } from '../../redux/slices/itemsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Cards = ({ id, name, imageUrl, price, color, handlerOnAddItemToCart }) => {
+import { setAddItem } from '../../redux/slices/cartSlice';
+
+const Cards = ({ id, name, imageUrl, price, color }) => {
   const dispatch = useDispatch();
 
-  const onCartAddItem = () => {
-    const obj = {
+  const { cartItems } = useSelector((state) => state.cart);
+
+  const onClickAddItem = () => {
+    const item = {
       id,
       name,
-      imageUrl,
       price,
+      imageUrl,
     };
-    handlerOnAddItemToCart(obj);
-    dispatch(setTotalPrice(obj.price));
+    dispatch(setAddItem(item));
   };
 
   return (
@@ -23,7 +25,7 @@ const Cards = ({ id, name, imageUrl, price, color, handlerOnAddItemToCart }) => 
       </div>
       <img src={imageUrl} alt={name} />
       <div className="cards--item-footer">
-        <button onClick={onCartAddItem}>В корзину</button>
+        <button onClick={() => onClickAddItem()}>В корзину</button>
         <span>{price} ₽</span>
       </div>
     </div>

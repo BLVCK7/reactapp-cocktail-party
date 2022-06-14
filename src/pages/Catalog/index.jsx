@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-import { setLoading, setItems, addItemToCart } from '../../redux/slices/itemsSlice';
+import { setLoading, setItems } from '../../redux/slices/itemsSlice';
 import { setFilters, setCategoryId } from '../../redux/slices/filterSlice';
 // import { itemsApi } from '../../redux/services/itemsService';
 
@@ -24,7 +24,9 @@ const Catalog = () => {
   const isMounted = React.useRef(false);
 
   const { activeFilter, activeSort, search, categoryId } = useSelector((state) => state.filter);
-  const { items, isLoading, totalPrice } = useSelector((state) => state.items);
+  const { items, isLoading } = useSelector((state) => state.items);
+  const { cartItems, totalPrice } = useSelector((state) => state.cart);
+  // const { items, totalPrice } = useSelector((state) => state.cart);
 
   const onChangeCategory = React.useCallback((idx) => {
     dispatch(setCategoryId(idx));
@@ -90,10 +92,6 @@ const Catalog = () => {
     // eslint-disable-next-line
   }, [activeSort, activeFilter, search, categoryId]);
 
-  const handlerOnAddItemToCart = (obj) => {
-    dispatch(addItemToCart(obj));
-  };
-
   // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
 
   return (
@@ -109,20 +107,27 @@ const Catalog = () => {
           </div>
         </Link>
         <Search />
-        <Link to="/cart">
-          <div className="cart">
-            <img src={cartSVG} alt="Cart icon" />
-            <p>{totalPrice} ₽</p>
-          </div>
-        </Link>
+        {cartItems.length === 0 ? (
+          <Link to="/empty_cart">
+            <div className="cart">
+              <img src={cartSVG} alt="Cart icon" />
+              <p>{totalPrice} ₽</p>
+            </div>
+          </Link>
+        ) : (
+          <Link to="/cart">
+            <div className="cart">
+              <img src={cartSVG} alt="Cart icon" />
+              <p>{totalPrice} ₽</p>
+            </div>
+          </Link>
+        )}
       </header>
       <Filter onChangeCategory={onChangeCategory} />
       <div className="cards">
         {isLoading
           ? [...new Array(3)].map((_, i) => <Skeleton key={i} />)
-          : items.map((obj) => (
-              <Cards key={obj.id} handlerOnAddItemToCart={handlerOnAddItemToCart} {...obj} />
-            ))}
+          : items.map((obj) => <Cards key={obj.id} {...obj} />)}
       </div>
     </>
   );
