@@ -2,8 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 import { setLoading, setItems, addItemToCart } from '../../redux/slices/itemsSlice';
+import { setFilters } from '../../redux/slices/filterSlice';
 // import { itemsApi } from '../../redux/services/itemsService';
 
 import './Catalog.scss';
@@ -12,16 +15,18 @@ import { Cards, Skeleton, Filter, Search } from '../../components';
 
 import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
+import { sortArr } from '../../components/Filter';
 
 const Catalog = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
 
   const { activeFilter, activeSort, search } = useSelector((state) => state.filter);
   const { items, isLoading, totalPrice } = useSelector((state) => state.items);
 
-  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
-
-  React.useEffect(() => {
+  const fetchItems = () => {
     dispatch(setLoading(true));
     axios
       .get(
@@ -35,7 +40,55 @@ const Catalog = () => {
         dispatch(setItems(response.data));
         dispatch(setLoading(false));
       });
+  };
+
+  // При первом рендере проверяются URL параметры и сохраняются в Redux
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+
+      const sortType = sortArr.find((obj) => obj.type === params.sortType);
+      const sortOrder = sortArr.find((obj) => obj.order === params.sortOrder);
+
+      console.log(params);
+
+      dispatch(
+        setFilters({
+          ...params,
+          sortType,
+          sortOrder,
+        }),
+      );
+      isSearch.current = true;
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  // Если изменили URL параметры и был первый рендер
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortType: activeSort.type,
+        sortOrder: activeSort.order,
+        activeFilter,
+      });
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true;
+    // eslint-disable-next-line
+  }, [activeSort, activeFilter]);
+
+  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
+
+  // Если был первый рендер, то запрашиваем Items
+  React.useEffect(() => {
     window.scrollTo(0, 0);
+
+    if (!isSearch.current) {
+      fetchItems();
+    }
+
+    isSearch.current = false;
     // eslint-disable-next-line
   }, [activeSort, activeFilter, search]);
 

@@ -2,6 +2,17 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveFilter, setActiveSort } from '../../redux/slices/filterSlice';
 
+export const sortArr = [
+  { name: 'популярности (по возр.)', type: 'rating', order: 'asc' },
+  { name: 'популярности (по убыв.)', type: 'rating', order: 'desc' },
+  { name: 'цене (по возр.)', type: 'price', order: 'asc' },
+  { name: 'цене (по убыв.)', type: 'price', order: 'desc' },
+  { name: 'алфавиту (А - Я)', type: 'name', order: 'asc' },
+  { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
+];
+
+export const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
+
 const Filter = () => {
   const dispatch = useDispatch();
   const { activeFilter, activeSort } = useSelector((state) => state.filter);
@@ -14,15 +25,8 @@ const Filter = () => {
     setAnimateSortIcon(!animateSortIcon);
   };
 
-  const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
-  const sortArr = [
-    { name: 'популярности (по возр.)', type: 'rating', order: 'asc' },
-    { name: 'популярности (по убыв.)', type: 'rating', order: 'desc' },
-    { name: 'цене (по возр.)', type: 'price', order: 'asc' },
-    { name: 'цене (по убыв.)', type: 'price', order: 'desc' },
-    { name: 'алфавиту (А - Я)', type: 'name', order: 'asc' },
-    { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
-  ];
+  console.log(activeFilter);
+  console.log(activeSort.name);
 
   return (
     <div className="filter">

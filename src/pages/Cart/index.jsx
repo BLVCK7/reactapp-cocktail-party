@@ -15,7 +15,6 @@ const Cart = () => {
   //   return cartItems[key].items[0];
   // });
 
-  console.log(cartItems);
   return (
     <>
       <header>
