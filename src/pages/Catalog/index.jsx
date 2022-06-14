@@ -28,6 +28,7 @@ const Catalog = () => {
 
   const onChangeCategory = React.useCallback((idx) => {
     dispatch(setCategoryId(idx));
+    // eslint-disable-next-line
   }, []);
 
   const fetchItems = () => {

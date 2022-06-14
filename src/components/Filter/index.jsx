@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveFilter, setActiveSort } from '../../redux/slices/filterSlice';
+import { setActiveSort } from '../../redux/slices/filterSlice';
 
 export const sortArr = [
   { name: 'популярности (по возр.)', sortProperty: '-rating' },
@@ -15,7 +15,10 @@ export const filterArr = ['Все', 'Хит', 'Десертные', 'Фрукт�
 
 const Filter = ({ onChangeCategory }) => {
   const dispatch = useDispatch();
-  const { activeFilter, activeSort, categoryId } = useSelector((state) => state.filter);
+
+  const { activeSort, categoryId } = useSelector((state) => state.filter);
+
+  const sortRef = React.useRef();
 
   const [animateSortIcon, setAnimateSortIcon] = React.useState(false);
   const [visiblePopUp, setVisiblePopUp] = React.useState(false);
@@ -25,8 +28,19 @@ const Filter = ({ onChangeCategory }) => {
     setAnimateSortIcon(!animateSortIcon);
   };
 
-  // console.log(activeFilter);
-  // console.log(activeSort.name);
+  React.useEffect(() => {
+    const handlleClickOutside = (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        setVisiblePopUp(false);
+        setAnimateSortIcon(false);
+      }
+    };
+
+    document.body.addEventListener('click', handlleClickOutside);
+
+    return () => document.body.addEventListener('click', handlleClickOutside);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="filter">
@@ -39,7 +53,7 @@ const Filter = ({ onChangeCategory }) => {
           {obj}
         </button>
       ))}
-      <div onClick={sortList} className="sort-popup">
+      <div ref={sortRef} onClick={sortList} className="sort-popup">
         <div className={animateSortIcon === true ? 'sort-icon-in' : 'sort-icon-out'}>
           <svg
             width="34"
