@@ -4,9 +4,8 @@ const initialState = {
   activeFilter: 0,
   categoryId: 0,
   activeSort: {
-    name: 'популярности (ASC)',
-    type: 'rating',
-    order: 'asc',
+    name: 'популярности (по возр.)',
+    sortProperty: '-rating',
   },
   search: '',
 };
@@ -28,10 +27,9 @@ export const filterSlice = createSlice({
       state.categoryId = action.payload;
     },
     setFilters: (state, action) => {
-      console.log(action);
-      state.activeFilter = Number(action.payload.activeFilter);
-      state.activeSort.type = action.payload.sortType.type;
-      state.activeSort.order = action.payload.sortOrder.order;
+      console.log(action.payload);
+      state.activeSort = action.payload.sort;
+      state.categoryId = Number(action.payload.categoryId);
     },
   },
 });

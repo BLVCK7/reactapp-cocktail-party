@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveFilter, setActiveSort } from '../../redux/slices/filterSlice';
 
 export const sortArr = [
-  { name: 'популярности (по возр.)', type: 'rating', order: 'asc' },
-  { name: 'популярности (по убыв.)', type: 'rating', order: 'desc' },
-  { name: 'цене (по возр.)', type: 'price', order: 'asc' },
-  { name: 'цене (по убыв.)', type: 'price', order: 'desc' },
-  { name: 'алфавиту (А - Я)', type: 'name', order: 'asc' },
-  { name: 'алфавиту (Я - А)', type: 'name', order: 'desc' },
+  { name: 'популярности (по возр.)', sortProperty: '-rating' },
+  { name: 'популярности (по убыв.)', sortProperty: 'rating' },
+  { name: 'цене (по возр.)', sortProperty: '-price' },
+  { name: 'цене (по убыв.)', sortProperty: 'price' },
+  { name: 'алфавиту (А - Я)', sortProperty: '-name' },
+  { name: 'алфавиту (Я - А)', sortProperty: 'name' },
 ];
 
 export const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
 
-const Filter = () => {
+const Filter = ({ onChangeCategory }) => {
   const dispatch = useDispatch();
-  const { activeFilter, activeSort } = useSelector((state) => state.filter);
+  const { activeFilter, activeSort, categoryId } = useSelector((state) => state.filter);
 
   const [animateSortIcon, setAnimateSortIcon] = React.useState(false);
   const [visiblePopUp, setVisiblePopUp] = React.useState(false);
@@ -25,8 +25,8 @@ const Filter = () => {
     setAnimateSortIcon(!animateSortIcon);
   };
 
-  console.log(activeFilter);
-  console.log(activeSort.name);
+  // console.log(activeFilter);
+  // console.log(activeSort.name);
 
   return (
     <div className="filter">
@@ -34,8 +34,8 @@ const Filter = () => {
       {filterArr.map((obj, i) => (
         <button
           key={i}
-          className={i === activeFilter ? 'active' : ''}
-          onClick={() => dispatch(setActiveFilter(i))}>
+          className={i === categoryId ? 'active' : ''}
+          onClick={() => onChangeCategory(i)}>
           {obj}
         </button>
       ))}

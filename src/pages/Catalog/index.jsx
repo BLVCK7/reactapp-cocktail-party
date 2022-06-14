@@ -6,7 +6,7 @@ import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
 import { setLoading, setItems, addItemToCart } from '../../redux/slices/itemsSlice';
-import { setFilters } from '../../redux/slices/filterSlice';
+import { setFilters, setCategoryId } from '../../redux/slices/filterSlice';
 // import { itemsApi } from '../../redux/services/itemsService';
 
 import './Catalog.scss';
@@ -23,18 +23,24 @@ const Catalog = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const { activeFilter, activeSort, search } = useSelector((state) => state.filter);
+  const { activeFilter, activeSort, search, categoryId } = useSelector((state) => state.filter);
   const { items, isLoading, totalPrice } = useSelector((state) => state.items);
+
+  const onChangeCategory = React.useCallback((idx) => {
+    dispatch(setCategoryId(idx));
+  }, []);
 
   const fetchItems = () => {
     dispatch(setLoading(true));
+    const sortBy = activeSort.sortProperty.replace('-', '');
+    const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
+    const category = categoryId > 0 ? `category=${categoryId}` : '';
+
     axios
       .get(
         `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
           search === '' ? '' : `search=${search}&`
-        }${activeFilter > 0 ? `category=${activeFilter}` : ''}&sortBy=${activeSort.type}&order=${
-          activeSort.order
-        }`,
+        }${category}&sortBy=${sortBy}&order=${order}`,
       )
       .then((response) => {
         dispatch(setItems(response.data));
@@ -46,17 +52,12 @@ const Catalog = () => {
   React.useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-
-      const sortType = sortArr.find((obj) => obj.type === params.sortType);
-      const sortOrder = sortArr.find((obj) => obj.order === params.sortOrder);
-
-      console.log(params);
+      const sort = sortArr.find((obj) => obj.sortProperty === params.sortProperty);
 
       dispatch(
         setFilters({
           ...params,
-          sortType,
-          sortOrder,
+          sort,
         }),
       );
       isSearch.current = true;
@@ -68,17 +69,14 @@ const Catalog = () => {
   React.useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
-        sortType: activeSort.type,
-        sortOrder: activeSort.order,
-        activeFilter,
+        sortProperty: activeSort.sortProperty,
+        categoryId,
       });
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
     // eslint-disable-next-line
-  }, [activeSort, activeFilter]);
-
-  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
+  }, [activeSort, activeFilter, categoryId]);
 
   // Если был первый рендер, то запрашиваем Items
   React.useEffect(() => {
@@ -87,14 +85,15 @@ const Catalog = () => {
     if (!isSearch.current) {
       fetchItems();
     }
-
     isSearch.current = false;
     // eslint-disable-next-line
-  }, [activeSort, activeFilter, search]);
+  }, [activeSort, activeFilter, search, categoryId]);
 
   const handlerOnAddItemToCart = (obj) => {
     dispatch(addItemToCart(obj));
   };
+
+  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
 
   return (
     <>
@@ -116,7 +115,7 @@ const Catalog = () => {
           </div>
         </Link>
       </header>
-      <Filter />
+      <Filter onChangeCategory={onChangeCategory} />
       <div className="cards">
         {isLoading
           ? [...new Array(3)].map((_, i) => <Skeleton key={i} />)
