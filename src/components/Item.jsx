@@ -1,9 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setAddItem, setMinusItem, setRemoveItem } from '../redux/slices/cartSlice';
 
 const Item = ({ id, img, name, price, count }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { cartItems } = useSelector((state) => state.cart);
 
   const onClickPlus = () => {
     dispatch(
@@ -15,6 +19,12 @@ const Item = ({ id, img, name, price, count }) => {
 
   const onClickMinus = () => {
     dispatch(setMinusItem(id));
+  };
+
+  const onClickRemove = () => {
+    if (window.confirm('Действительно хочешь удалить?')) {
+      dispatch(setRemoveItem(id));
+    }
   };
 
   return (
@@ -51,6 +61,7 @@ const Item = ({ id, img, name, price, count }) => {
       <div className="cancel">
         {' '}
         <svg
+          onClick={onClickRemove}
           width="35"
           height="35"
           viewBox="0 0 35 35"

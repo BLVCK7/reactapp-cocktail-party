@@ -26,12 +26,30 @@ export const cartSlice = createSlice({
       }, 0);
       state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
     },
+    setMinusItem: (state, action) => {
+      const findItem = state.cartItems.find((obj) => obj.id === action.payload);
+
+      if (findItem) {
+        findItem.count--;
+      }
+
+      state.totalPrice = state.cartItems.reduce((sum, obj) => {
+        return obj.price * obj.count + sum;
+      }, 0);
+      state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
+    },
     setRemoveItem: (state, action) => {
       state.cartItems = state.cartItems.filter((obj) => obj.id !== action.payload);
+
+      state.totalPrice = state.cartItems.reduce((sum, obj) => {
+        return obj.price * obj.count + sum;
+      }, 0);
+      state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
     },
     setClearItem: (state) => {
       state.cartItems = [];
       state.totalPrice = 0;
+      state.totalCount = 0;
     },
   },
 });

@@ -1,12 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { setAddItem } from '../../redux/slices/cartSlice';
 
 const Cards = ({ id, name, imageUrl, price, color }) => {
   const dispatch = useDispatch();
-
-  const { cartItems } = useSelector((state) => state.cart);
 
   const onClickAddItem = () => {
     const item = {
@@ -33,5 +31,3 @@ const Cards = ({ id, name, imageUrl, price, color }) => {
 };
 
 export default Cards;
-
-// (obj.id === i ? setCartItems(obj) : '')

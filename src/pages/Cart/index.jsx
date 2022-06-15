@@ -15,11 +15,17 @@ const Cart = () => {
   const { cartItems, totalPrice, totalCount } = useSelector((state) => state.cart);
 
   const onClickClearCart = () => {
-    dispatch(setClearItem());
-    navigate('/empty_cart');
+    if (window.confirm('Очистить корзину?')) {
+      dispatch(setClearItem());
+      navigate('/empty_cart');
+    }
   };
 
-  console.log(cartItems);
+  // Проверка на пустую корзину
+  if (!totalCount) {
+    navigate('/empty_cart');
+  }
+
   return (
     <>
       <header>
@@ -104,6 +110,7 @@ const Cart = () => {
           {cartItems.map((obj, i) => (
             <Item
               key={i}
+              id={obj.id}
               img={obj.imageUrl}
               name={obj.name}
               price={obj.price * obj.count}
