@@ -18,7 +18,9 @@ const Item = ({ id, img, name, price, count }) => {
   };
 
   const onClickMinus = () => {
-    dispatch(setMinusItem(id));
+    if (count >= 2) {
+      dispatch(setMinusItem(id));
+    }
   };
 
   const onClickRemove = () => {
