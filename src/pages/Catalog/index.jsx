@@ -1,21 +1,18 @@
 import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
 
-import { setLoading, setItems } from '../../redux/slices/itemsSlice';
+import { fetchItemsThunk } from '../../redux/slices/itemsSlice';
 import { setFilters, setCategoryId } from '../../redux/slices/filterSlice';
-// import { itemsApi } from '../../redux/services/itemsService';
 
 import './Catalog.scss';
 
 import { Cards, Skeleton, Filter, Search } from '../../components';
+import { sortArr } from '../../components/Filter';
 
 import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
-import { sortArr } from '../../components/Filter';
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -24,32 +21,28 @@ const Catalog = () => {
   const isMounted = React.useRef(false);
 
   const { activeFilter, activeSort, search, categoryId } = useSelector((state) => state.filter);
-  const { items, isLoading } = useSelector((state) => state.items);
+  const { items, status } = useSelector((state) => state.items);
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
-  // const { items, totalPrice } = useSelector((state) => state.cart);
+
+  const fetchItems = async () => {
+    const sortBy = activeSort.sortProperty.replace('-', '');
+    const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
+    const category = categoryId > 0 ? `category=${categoryId}` : '';
+
+    dispatch(
+      fetchItemsThunk({
+        sortBy,
+        order,
+        category,
+        search,
+      }),
+    );
+  };
 
   const onChangeCategory = React.useCallback((idx) => {
     dispatch(setCategoryId(idx));
     // eslint-disable-next-line
   }, []);
-
-  const fetchItems = () => {
-    dispatch(setLoading(true));
-    const sortBy = activeSort.sortProperty.replace('-', '');
-    const order = activeSort.sortProperty.includes('-') ? 'asc' : 'desc';
-    const category = categoryId > 0 ? `category=${categoryId}` : '';
-
-    axios
-      .get(
-        `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
-          search === '' ? '' : `search=${search}&`
-        }${category}&sortBy=${sortBy}&order=${order}`,
-      )
-      .then((response) => {
-        dispatch(setItems(response.data));
-        dispatch(setLoading(false));
-      });
-  };
 
   // При первом рендере проверяются URL параметры и сохраняются в Redux
   React.useEffect(() => {
@@ -68,7 +61,7 @@ const Catalog = () => {
     // eslint-disable-next-line
   }, []);
 
-  // Если изменили URL параметры и был первый рендер
+  // Если изменили URL параметры и был первый рендер, то отправляет на страницу с фильтрацией
   React.useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
@@ -91,8 +84,6 @@ const Catalog = () => {
     isSearch.current = false;
     // eslint-disable-next-line
   }, [activeSort, activeFilter, search, categoryId]);
-
-  // const { data, error, isLoading } = itemsApi.useFetchItemsQuery(activeSort, activeFilter);
 
   return (
     <>
@@ -125,9 +116,15 @@ const Catalog = () => {
       </header>
       <Filter onChangeCategory={onChangeCategory} />
       <div className="cards">
-        {isLoading
-          ? [...new Array(3)].map((_, i) => <Skeleton key={i} />)
-          : items.map((obj) => <Cards key={obj.id} {...obj} />)}
+        {status === 'rejected' ? (
+          <div>
+            <h2>Ошибка 404</h2>
+          </div>
+        ) : status === 'loading' ? (
+          [...new Array(3)].map((_, i) => <Skeleton key={i} />)
+        ) : (
+          items.map((obj) => <Cards key={obj.id} {...obj} />)
+        )}
       </div>
     </>
   );

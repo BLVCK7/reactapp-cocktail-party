@@ -59,7 +59,7 @@ const Start = () => {
             Он-лайн магазин самых вкусных коктейлей в Москве! <br />
             Только авторские напитки!
           </p>
-          <Link to="/catalog">
+          <Link to="/catalog?sortProperty=-rating&categoryId=0">
             <button>Попробовать</button>
           </Link>
         </div>

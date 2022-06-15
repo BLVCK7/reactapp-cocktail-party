@@ -1,13 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { setAddItem, setMinusItem, setRemoveItem } from '../redux/slices/cartSlice';
 
 const Item = ({ id, img, name, price, count }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { cartItems } = useSelector((state) => state.cart);
 
   const onClickPlus = () => {
     dispatch(
