@@ -6,13 +6,13 @@ import './Cart.scss';
 
 import Item from '../../components/Item';
 
-import { setClearItem } from '../../redux/slices/cartSlice';
+import { selectCart, setClearItem } from '../../redux/slices/cartSlice';
 
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { cartItems, totalPrice, totalCount } = useSelector((state) => state.cart);
+  const { cartItems, totalPrice, totalCount } = useSelector(selectCart);
 
   const onClickClearCart = () => {
     if (window.confirm('Очистить корзину?')) {

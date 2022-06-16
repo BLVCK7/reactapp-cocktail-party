@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 
-import { fetchItemsThunk } from '../../redux/slices/itemsSlice';
-import { setFilters, setCategoryId } from '../../redux/slices/filterSlice';
+import { fetchItemsThunk, selectItems } from '../../redux/slices/itemsSlice';
+import { setFilters, setCategoryId, selectFilter } from '../../redux/slices/filterSlice';
 
 import './Catalog.scss';
 
@@ -13,6 +13,7 @@ import { sortArr } from '../../components/Filter';
 
 import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
+import { selectCart } from '../../redux/slices/cartSlice';
 
 const Catalog = () => {
   const navigate = useNavigate();
@@ -20,9 +21,9 @@ const Catalog = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const { activeFilter, activeSort, search, categoryId } = useSelector((state) => state.filter);
-  const { items, status } = useSelector((state) => state.items);
-  const { cartItems, totalPrice } = useSelector((state) => state.cart);
+  const { activeFilter, activeSort, search, categoryId } = useSelector(selectFilter);
+  const { items, status } = useSelector(selectItems);
+  const { cartItems, totalPrice } = useSelector(selectCart);
 
   const fetchItems = async () => {
     const sortBy = activeSort.sortProperty.replace('-', '');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveSort } from '../../redux/slices/filterSlice';
+import { selectFilter, setActiveSort } from '../../redux/slices/filterSlice';
 
 export const sortArr = [
   { name: 'популярности (по возр.)', sortProperty: '-rating' },
@@ -16,7 +16,7 @@ export const filterArr = ['Все', 'Хит', 'Десертные', 'Фрукт�
 const Filter = ({ onChangeCategory }) => {
   const dispatch = useDispatch();
 
-  const { activeSort, categoryId } = useSelector((state) => state.filter);
+  const { activeSort, categoryId } = useSelector(selectFilter);
 
   const sortRef = React.useRef();
 
