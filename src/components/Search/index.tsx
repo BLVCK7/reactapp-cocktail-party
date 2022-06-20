@@ -11,12 +11,12 @@ const Search = () => {
   const dispatch = useDispatch();
 
   const [value, setValue] = React.useState('');
-  const inputRef = React.useRef();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const onClickClear = () => {
     dispatch(setSearch(''));
     setValue('');
-    inputRef.current.focus();
+    inputRef.current?.focus();
   };
 
   // eslint-disable-next-line
@@ -27,7 +27,7 @@ const Search = () => {
     [],
   );
 
-  const onChangeInput = (e) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     testDebounce(e.target.value);
   };

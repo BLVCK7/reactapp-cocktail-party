@@ -5,7 +5,7 @@ import './EmptyCart.scss';
 import emptyCartMilkshake from '../../assets/img/empty_cart.png';
 import { Link } from 'react-router-dom';
 
-const EmptyCart = () => {
+const EmptyCart: React.FC = () => {
   return (
     <>
       <header>

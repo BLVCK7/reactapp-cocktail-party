@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './Start.scss';
 
-const Start = () => {
+const Start: React.FC = () => {
   return (
     <div className="start">
       <header>

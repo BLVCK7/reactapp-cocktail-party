@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { RootState } from '../store';
 
 export const fetchItemsThunk = createAsyncThunk('items/fetchItemsStatus', async (params) => {
   const { sortBy, order, category, search } = params;
@@ -11,7 +12,20 @@ export const fetchItemsThunk = createAsyncThunk('items/fetchItemsStatus', async 
   return response.data;
 });
 
-const initialState = {
+type itemsType = {
+  id: number;
+  name: string;
+  imageUrl: string;
+  price: number;
+  color: string;
+}
+
+interface itemsSliceState {
+  items: itemsType[],
+  status: 'loading' | 'success' | 'rejected',
+}
+
+const initialState: itemsSliceState = {
   items: [],
   status: 'loading',
 };
@@ -24,7 +38,7 @@ export const itemsSlice = createSlice({
       state.items = action.payload;
     },
     setLoading: (state, action) => {
-      state.isLoading = action.payload;
+      state.status = action.payload;
     },
   },
   extraReducers: {
@@ -43,7 +57,7 @@ export const itemsSlice = createSlice({
   },
 });
 
-export const selectItems = (state) => state.items;
+export const selectItems = (state: RootState) => state.items;
 
 export const { setItems, setLoading } = itemsSlice.actions;
 

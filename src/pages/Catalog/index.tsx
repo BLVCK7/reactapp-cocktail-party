@@ -15,7 +15,7 @@ import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
 import { selectCart } from '../../redux/slices/cartSlice';
 
-const Catalog = () => {
+const Catalog: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = React.useRef(false);
@@ -31,6 +31,7 @@ const Catalog = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
 
     dispatch(
+      //@ts-ignore
       fetchItemsThunk({
         sortBy,
         order,
@@ -40,7 +41,7 @@ const Catalog = () => {
     );
   };
 
-  const onChangeCategory = React.useCallback((idx) => {
+  const onChangeCategory = React.useCallback((idx: number) => {
     dispatch(setCategoryId(idx));
     // eslint-disable-next-line
   }, []);
@@ -124,7 +125,7 @@ const Catalog = () => {
         ) : status === 'loading' ? (
           [...new Array(3)].map((_, i) => <Skeleton key={i} />)
         ) : (
-          items.map((obj) => <Cards key={obj.id} {...obj} />)
+          items.map((obj: any) => <Cards key={obj.id} {...obj} />)
         )}
       </div>
     </>

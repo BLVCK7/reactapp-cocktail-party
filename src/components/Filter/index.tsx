@@ -2,7 +2,16 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter, setActiveSort } from '../../redux/slices/filterSlice';
 
-export const sortArr = [
+type sortItem = {
+  name: string;
+  sortProperty: string;
+}
+
+type FilterProps = {
+  onChangeCategory: (i: number) => void;
+}
+
+export const sortArr: sortItem[] = [
   { name: 'популярности (по возр.)', sortProperty: '-rating' },
   { name: 'популярности (по убыв.)', sortProperty: 'rating' },
   { name: 'цене (по возр.)', sortProperty: '-price' },
@@ -13,12 +22,12 @@ export const sortArr = [
 
 export const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
 
-const Filter = ({ onChangeCategory }) => {
+const Filter: React.FC<FilterProps> = ({ onChangeCategory }) => {
   const dispatch = useDispatch();
 
   const { activeSort, categoryId } = useSelector(selectFilter);
 
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   const [animateSortIcon, setAnimateSortIcon] = React.useState(false);
   const [visiblePopUp, setVisiblePopUp] = React.useState(false);
@@ -29,16 +38,16 @@ const Filter = ({ onChangeCategory }) => {
   };
 
   React.useEffect(() => {
-    const handlleClickOutside = (event) => {
-      if (!event.path.includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setVisiblePopUp(false);
         setAnimateSortIcon(false);
       }
     };
 
-    document.body.addEventListener('click', handlleClickOutside);
+    document.body.addEventListener('click', handleClickOutside);
 
-    return () => document.body.addEventListener('click', handlleClickOutside);
+    return () => document.body.addEventListener('click', handleClickOutside);
     // eslint-disable-next-line
   }, []);
 
@@ -85,7 +94,7 @@ const Filter = ({ onChangeCategory }) => {
                 <li
                   onClick={() => dispatch(setActiveSort(obj))}
                   key={i}
-                  className={activeSort.name === i ? 'active' : ''}>
+                  className={activeSort.sortProperty === obj.sortProperty ? 'active' : ''}>
                   {obj.name}
                 </li>
               ))}

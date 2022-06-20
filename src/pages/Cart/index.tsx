@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './Cart.scss';
 
-import Item from '../../components/Item';
+import Item from '../../components/CartItem';
 
 import { selectCart, setClearItem } from '../../redux/slices/cartSlice';
 
-const Cart = () => {
+const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -107,7 +107,7 @@ const Cart = () => {
           </div>
         </div>
         <div className="items">
-          {cartItems.map((obj, i) => (
+          {cartItems.map((obj: any, i:number) => (
             <Item
               key={i}
               id={obj.id}
