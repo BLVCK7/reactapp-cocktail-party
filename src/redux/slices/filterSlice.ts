@@ -1,24 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-type ActiveSortType = {
-  name: string;
-  sortProperty: '-rating' | 'rating' | '-price' | 'price' | '-name' | 'name';
+export enum SortPropertyEnum {
+  RATING_DESC = 'rating',
+  RATING_ASC = '-rating',
+  PRICE_DESC = 'price',
+  PRICE_ASC = '-price',
+  NAME_DESC = 'name',
+  NAME_ASC = '-name'
 }
 
-interface filterSliceState {
-  activeFilter: number;
+export type ActiveSortType = {
+  name: string;
+  sortProperty: SortPropertyEnum;
+}
+
+export interface filterSliceState {
   categoryId: number;
   activeSort: ActiveSortType;
   search: string;
 }
 
 const initialState: filterSliceState = {
-  activeFilter: 0,
   categoryId: 0,
   activeSort: {
     name: 'популярности (по возр.)',
-    sortProperty: '-rating',
+    sortProperty: SortPropertyEnum.RATING_ASC,
   },
   search: '',
 };
@@ -27,28 +34,33 @@ export const filterSlice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
-    setActiveFilter: (state, action) => {
-      state.activeFilter = action.payload;
-    },
-    setActiveSort: (state, action) => {
+    setActiveSort: (state, action: PayloadAction<ActiveSortType>) => {
       state.activeSort = action.payload;
     },
-    setSearch: (state, action) => {
+    setSearch: (state, action: PayloadAction<string>) => {
       state.search = action.payload;
     },
-    setCategoryId: (state, action) => {
+    setCategoryId: (state, action: PayloadAction<number>) => {
       state.categoryId = action.payload;
     },
-    setFilters: (state, action) => {
-      state.activeSort = action.payload.sort;
-      state.categoryId = Number(action.payload.categoryId);
+    setFilters: (state, action: PayloadAction<filterSliceState>) => {
+      if (Object.keys(action.payload).length) {
+        state.categoryId = Number(action.payload.categoryId)
+        state.activeSort = action.payload.activeSort;
+      } else {
+        state.categoryId = 0
+        state.activeSort = {
+          name: 'популярности (по возр.)',
+          sortProperty: SortPropertyEnum.RATING_ASC,
+        }
+      }
     },
   },
 });
 
 export const selectFilter = (state: RootState) => state.filter;
 
-export const { setActiveFilter, setActiveSort, setSearch, setFilters, setCategoryId } =
+export const { setActiveSort, setSearch, setFilters, setCategoryId } =
   filterSlice.actions;
 
 export default filterSlice.reducer;

@@ -2,9 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
 
-export const fetchItemsThunk = createAsyncThunk('items/fetchItemsStatus', async (params) => {
+export type FetchItems = {
+  sortBy: string;
+  order: string;
+  category: string;
+  search: string;
+}
+
+export const fetchItemsThunk = createAsyncThunk<itemsType[],FetchItems >('items/fetchItemsStatus', async (params) => {
   const { sortBy, order, category, search } = params;
-  const response = await axios.get(
+  const response = await axios.get<itemsType[]>(
     `https://628f8bb5dc47852365428e7e.mockapi.io/items?${
       search === '' ? '' : `search=${search}&`
     }${category}&sortBy=${sortBy}&order=${order}`,
@@ -13,11 +20,12 @@ export const fetchItemsThunk = createAsyncThunk('items/fetchItemsStatus', async 
 });
 
 type itemsType = {
-  id: number;
+  id: string;
   name: string;
   imageUrl: string;
   price: number;
   color: string;
+  count: number;
 }
 
 interface itemsSliceState {
@@ -41,20 +49,22 @@ export const itemsSlice = createSlice({
       state.status = action.payload;
     },
   },
-  extraReducers: {
-    [fetchItemsThunk.pending]: (state) => {
+  extraReducers: (builder) => {
+    builder.addCase(fetchItemsThunk.pending, (state) => {
       state.status = 'loading';
       state.items = [];
-    },
-    [fetchItemsThunk.fulfilled]: (state, action) => {
+    });
+
+    builder.addCase(fetchItemsThunk.fulfilled, (state,action) => {
       state.items = action.payload;
       state.status = 'success';
-    },
-    [fetchItemsThunk.rejected]: (state) => {
+    });
+
+    builder.addCase(fetchItemsThunk.rejected, (state) => {
       state.status = 'rejected';
       state.items = [];
-    },
-  },
+    })
+  }
 });
 
 export const selectItems = (state: RootState) => state.items;

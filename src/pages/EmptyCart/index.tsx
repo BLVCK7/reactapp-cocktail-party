@@ -61,7 +61,7 @@ const EmptyCart: React.FC = () => {
           <h1>Корзина пустая</h1>
           <p>Быстрее переходи и заказывай самые вкусные милкшейки на планете!</p>
           <img src={emptyCartMilkshake} alt="Empty cart" />
-          <Link to="/catalog">
+          <Link to="/catalog?sortProperty=-rating&categoryId=0">
             <button>Выбрать милкшейк</button>
           </Link>
         </div>

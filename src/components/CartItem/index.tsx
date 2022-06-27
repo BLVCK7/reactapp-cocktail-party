@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setAddItem, setMinusItem, setRemoveItem } from '../../redux/slices/cartSlice';
 
 type ItemProps = {
-  id: number;
+  id: string;
   img: string;
   name: string;
   price: number;
@@ -15,6 +15,7 @@ const Item: React.FC<ItemProps> = ({ id, img, name, price, count }) => {
 
   const onClickPlus = () => {
     dispatch(
+      //@ts-ignore
       setAddItem({
         id,
       }),

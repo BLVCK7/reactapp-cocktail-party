@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { CartItemsType, setAddItem } from '../../redux/slices/cartSlice';
 
 type CardsProps = {
-  id: number;
+  id: string;
   name: string;
   imageUrl: string;
   price: number;
@@ -20,7 +20,8 @@ const Cards: React.FC<CardsProps> = ({ id, name, imageUrl, price, color}) => {
       name,
       price,
       imageUrl,
-      count: 0
+      count: 0,
+      color
     };
     dispatch(setAddItem(item));
   };

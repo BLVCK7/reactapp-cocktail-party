@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../redux/store';  
 import qs from 'qs';
 
-import { fetchItemsThunk, selectItems } from '../../redux/slices/itemsSlice';
+import { FetchItems, fetchItemsThunk, selectItems } from '../../redux/slices/itemsSlice';
 import { setFilters, setCategoryId, selectFilter } from '../../redux/slices/filterSlice';
 
 import './Catalog.scss';
@@ -15,13 +16,14 @@ import logoSVG from '../../assets/img/logo.svg';
 import cartSVG from '../../assets/img/cart.svg';
 import { selectCart } from '../../redux/slices/cartSlice';
 
+
 const Catalog: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const { activeFilter, activeSort, search, categoryId } = useSelector(selectFilter);
+  const { activeSort, search, categoryId } = useSelector(selectFilter);
   const { items, status } = useSelector(selectItems);
   const { cartItems, totalPrice } = useSelector(selectCart);
 
@@ -31,7 +33,6 @@ const Catalog: React.FC = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
 
     dispatch(
-      //@ts-ignore
       fetchItemsThunk({
         sortBy,
         order,
@@ -49,17 +50,15 @@ const Catalog: React.FC = () => {
   // При первом рендере проверяются URL параметры и сохраняются в Redux
   React.useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sort = sortArr.find((obj) => obj.sortProperty === params.sortProperty);
-
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        }),
-      );
-      isSearch.current = true;
+      const params = qs.parse(window.location.search.substring(1)) as FetchItems;
+      const sort = sortArr.find((obj) => obj.sortProperty === params.sortBy);
+      dispatch(setFilters({
+        search: params.search,
+        categoryId: Number(params.category),
+        activeSort: sort || sortArr[0]
+      }));
     }
+    isSearch.current = true;
     // eslint-disable-next-line
   }, []);
 
@@ -74,7 +73,7 @@ const Catalog: React.FC = () => {
     }
     isMounted.current = true;
     // eslint-disable-next-line
-  }, [activeSort, activeFilter, categoryId]);
+  }, [activeSort, categoryId]);
 
   // Если был первый рендер, то запрашиваем Items
   React.useEffect(() => {
@@ -85,7 +84,7 @@ const Catalog: React.FC = () => {
     }
     isSearch.current = false;
     // eslint-disable-next-line
-  }, [activeSort, activeFilter, search, categoryId]);
+  }, [activeSort.sortProperty, search, categoryId]);
 
   return (
     <>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter, setActiveSort } from '../../redux/slices/filterSlice';
+import { selectFilter, setActiveSort, SortPropertyEnum } from '../../redux/slices/filterSlice';
 
 type sortItem = {
   name: string;
-  sortProperty: string;
+  sortProperty: SortPropertyEnum;
 }
 
 type FilterProps = {
@@ -12,12 +12,12 @@ type FilterProps = {
 }
 
 export const sortArr: sortItem[] = [
-  { name: 'популярности (по возр.)', sortProperty: '-rating' },
-  { name: 'популярности (по убыв.)', sortProperty: 'rating' },
-  { name: 'цене (по возр.)', sortProperty: '-price' },
-  { name: 'цене (по убыв.)', sortProperty: 'price' },
-  { name: 'алфавиту (А - Я)', sortProperty: '-name' },
-  { name: 'алфавиту (Я - А)', sortProperty: 'name' },
+  { name: 'популярности (по возр.)', sortProperty: SortPropertyEnum.RATING_ASC },
+  { name: 'популярности (по убыв.)', sortProperty: SortPropertyEnum.RATING_DESC },
+  { name: 'цене (по возр.)', sortProperty: SortPropertyEnum.PRICE_ASC },
+  { name: 'цене (по убыв.)', sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: 'алфавиту (А - Я)', sortProperty: SortPropertyEnum.NAME_ASC },
+  { name: 'алфавиту (Я - А)', sortProperty: SortPropertyEnum.NAME_DESC },
 ];
 
 export const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
@@ -36,6 +36,10 @@ const Filter: React.FC<FilterProps> = ({ onChangeCategory }) => {
     setVisiblePopUp(!visiblePopUp);
     setAnimateSortIcon(!animateSortIcon);
   };
+
+  const onClickSortItem = (obj: sortItem) => {
+    dispatch(setActiveSort(obj))
+  }
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -92,7 +96,7 @@ const Filter: React.FC<FilterProps> = ({ onChangeCategory }) => {
             <ul>
               {sortArr.map((obj, i) => (
                 <li
-                  onClick={() => dispatch(setActiveSort(obj))}
+                  onClick={() => onClickSortItem(obj)}
                   key={i}
                   className={activeSort.sortProperty === obj.sortProperty ? 'active' : ''}>
                   {obj.name}
