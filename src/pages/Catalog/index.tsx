@@ -20,12 +20,11 @@ import { selectCart } from '../../redux/slices/cartSlice';
 const Catalog: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
   const { activeSort, search, categoryId } = useSelector(selectFilter);
   const { items, status } = useSelector(selectItems);
-  const { cartItems, totalPrice } = useSelector(selectCart);
+  const { cartItems, totalPrice, totalCount } = useSelector(selectCart);
 
   const fetchItems = async () => {
     const sortBy = activeSort.sortProperty.replace('-', '');
@@ -40,6 +39,7 @@ const Catalog: React.FC = () => {
         search,
       }),
     );
+    window.scrollTo(0, 0);
   };
 
   const onChangeCategory = React.useCallback((idx: number) => {
@@ -48,43 +48,51 @@ const Catalog: React.FC = () => {
   }, []);
 
   // При первом рендере проверяются URL параметры и сохраняются в Redux
-  React.useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1)) as FetchItems;
-      const sort = sortArr.find((obj) => obj.sortProperty === params.sortBy);
-      dispatch(setFilters({
-        search: params.search,
-        categoryId: Number(params.category),
-        activeSort: sort || sortArr[0]
-      }));
-    }
-    isSearch.current = true;
+  // React.useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(window.location.search.substring(1)) as FetchItems;
+  //     const sort = sortArr.find((obj) => obj.sortProperty === params.sortBy);
+  //     dispatch(setFilters({
+  //       search: params.search,
+  //       categoryId: Number(params.category),
+  //       activeSort: sort || sortArr[0]
+  //     }));
+  //   }
+  //   isSearch.current = true;
     // eslint-disable-next-line
-  }, []);
+  // }, []);
 
   // Если изменили URL параметры и был первый рендер, то отправляет на страницу с фильтрацией
   React.useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: activeSort.sortProperty,
-        categoryId,
-      });
-      navigate(`?${queryString}`);
-    }
-    isMounted.current = true;
-    // eslint-disable-next-line
-  }, [activeSort, categoryId]);
+  //   if (isMounted.current) {
+  //     const queryString = qs.stringify({
+  //       sortProperty: activeSort.sortProperty,
+  //       categoryId: categoryId,
+  //     });
+  //     navigate(`?${queryString}`);
+  //   }
+  //   isMounted.current = true;
+  //   // eslint-disable-next-line
+  // }, [activeSort, categoryId]);
 
-  // Если был первый рендер, то запрашиваем Items
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
+  // // Если был первый рендер, то запрашиваем Items
+  // React.useEffect(() => {
+  //   window.scrollTo(0, 0);
 
-    if (!isSearch.current) {
+
       fetchItems();
-    }
-    isSearch.current = false;
+    
+    // isSearch.current = false;
     // eslint-disable-next-line
   }, [activeSort.sortProperty, search, categoryId]);
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(cartItems)
+      localStorage.setItem('cart', json)
+    }
+    isMounted.current = true
+  }, [cartItems, totalPrice, totalCount])
 
   return (
     <>

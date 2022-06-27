@@ -1,4 +1,7 @@
+import { calcTotalCount } from './../../utils/calcTotalCount';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { calcTotalPrice } from '../../utils/calcTotalPrice';
+import { getCartFromLS } from '../../utils/getCartFromLS';
 import { RootState } from '../store';
 
 export type CartItemsType = {
@@ -16,11 +19,13 @@ interface cartSliceState {
   cartItems: CartItemsType[];
 }
 
+const {cartItems, totalPrice, totalCount} = getCartFromLS()
+
 const initialState: cartSliceState = {
-  cartItems: [],
-  totalPrice: 0,
-  totalCount: 0,
-};
+  cartItems,
+  totalPrice,
+  totalCount,
+}
 
 export const cartSlice = createSlice({
   name: 'cart',
@@ -37,10 +42,8 @@ export const cartSlice = createSlice({
           count: 1,
         });
       }
-      state.totalPrice = state.cartItems.reduce((sum, obj) => {
-        return obj.price * obj.count + sum;
-      }, 0);
-      state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
+      state.totalPrice = calcTotalPrice(state.cartItems)
+      state.totalCount = calcTotalCount(state.cartItems)
     },
     setMinusItem: (state, action: PayloadAction<string>) => {
       const findItem = state.cartItems.find((obj) => obj.id === action.payload);
@@ -49,18 +52,14 @@ export const cartSlice = createSlice({
         findItem.count--;
       }
 
-      state.totalPrice = state.cartItems.reduce((sum, obj) => {
-        return obj.price * obj.count + sum;
-      }, 0);
-      state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
+      state.totalPrice = calcTotalPrice(state.cartItems)
+      state.totalCount = calcTotalCount(state.cartItems)
     },
     setRemoveItem: (state, action: PayloadAction<string>) => {
       state.cartItems = state.cartItems.filter((obj) => obj.id !== action.payload);
 
-      state.totalPrice = state.cartItems.reduce((sum, obj) => {
-        return obj.price * obj.count + sum;
-      }, 0);
-      state.totalCount = state.cartItems.reduce((sum, item) => sum + item.count, 0);
+      state.totalPrice = calcTotalPrice(state.cartItems)
+      state.totalCount = calcTotalCount(state.cartItems)
     },
     setClearItem: (state) => {
       state.cartItems = [];

@@ -59,7 +59,7 @@ const Start: React.FC = () => {
             Он-лайн магазин самых вкусных коктейлей в Москве! <br />
             Только авторские напитки!
           </p>
-          <Link to="/catalog?sortProperty=-rating&categoryId=0">
+          <Link to="/catalog">
             <button>Попробовать</button>
           </Link>
         </div>

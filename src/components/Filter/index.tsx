@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter, setActiveSort, SortPropertyEnum } from '../../redux/slices/filterSlice';
+import useWhyDidYouUpdate from 'ahooks/lib/useWhyDidYouUpdate'
 
 type sortItem = {
   name: string;
@@ -22,7 +23,8 @@ export const sortArr: sortItem[] = [
 
 export const filterArr = ['Все', 'Хит', 'Десертные', 'Фруктовые', 'Без сахара'];
 
-const Filter: React.FC<FilterProps> = ({ onChangeCategory }) => {
+const Filter: React.FC<FilterProps> = React.memo(({ onChangeCategory }) => {
+  // useWhyDidYouUpdate('Filter', {onChangeCategory})
   const dispatch = useDispatch();
 
   const { activeSort, categoryId } = useSelector(selectFilter);
@@ -109,6 +111,6 @@ const Filter: React.FC<FilterProps> = ({ onChangeCategory }) => {
       </div>
     </div>
   );
-};
+})
 
 export default Filter;

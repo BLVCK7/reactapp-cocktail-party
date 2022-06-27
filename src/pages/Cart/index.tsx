@@ -8,9 +8,11 @@ import Item from '../../components/CartItem';
 
 import { selectCart, setClearItem } from '../../redux/slices/cartSlice';
 
+
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isMounted = React.useRef(false);
 
   const { cartItems, totalPrice, totalCount } = useSelector(selectCart);
 
@@ -25,6 +27,14 @@ const Cart: React.FC = () => {
   if (!totalCount) {
     navigate('/empty_cart');
   }
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(cartItems)
+      localStorage.setItem('cart', json)
+    }
+    isMounted.current = true
+  }, [cartItems, totalPrice, totalCount])
 
   return (
     <>
